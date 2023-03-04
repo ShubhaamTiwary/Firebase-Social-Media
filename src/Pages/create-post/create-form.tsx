@@ -1,6 +1,9 @@
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import {yupResolver} from '@hookform/resolvers/yup';
+import {addDoc, collection} from 'firebase/firestore';
+import {auth, db} from '../../config/firebase'
+import {useAuthState} from "react-firebase-hooks/auth";
 
 interface CreateFormData{
     title : string;
@@ -8,6 +11,7 @@ interface CreateFormData{
 }
 
 export const CreateForm = () =>{
+    const [user]=useAuthState(auth);
     const schema = yup.object().shape({
         tittle : yup.string(),
         description : yup.string().required("Description Required"),
@@ -16,8 +20,15 @@ export const CreateForm = () =>{
         resolver:yupResolver(schema)
     })
 
-    const onCreatePost = (data:CreateFormData) =>{
-        console.log(data);
+    const postRef = collection(db,"posts");
+
+    const onCreatePost = async (data:CreateFormData) =>{
+        await addDoc(postRef,{
+            title: data.title,
+            description :  data.description,
+            username : user?.displayName,
+            id : user?.uid
+        })
     }
     return(
         <form onSubmit={handleSubmit(onCreatePost)}>
