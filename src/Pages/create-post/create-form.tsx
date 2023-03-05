@@ -4,6 +4,7 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {addDoc, collection} from 'firebase/firestore';
 import {auth, db} from '../../config/firebase'
 import {useAuthState} from "react-firebase-hooks/auth";
+import {useNavigate} from 'react-router-dom'
 
 interface CreateFormData{
     title : string;
@@ -12,6 +13,8 @@ interface CreateFormData{
 
 export const CreateForm = () =>{
     const [user]=useAuthState(auth);
+    const navigate=useNavigate();
+
     const schema = yup.object().shape({
         tittle : yup.string(),
         description : yup.string().required("Description Required"),
@@ -27,8 +30,10 @@ export const CreateForm = () =>{
             title: data.title,
             description :  data.description,
             username : user?.displayName,
-            id : user?.uid
-        })
+            userId : user?.uid
+        });
+
+        navigate('/');
     }
     return(
         <form onSubmit={handleSubmit(onCreatePost)}>
