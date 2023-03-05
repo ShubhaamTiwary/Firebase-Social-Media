@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { db } from '../../config/firebase';
 import { Post } from './post';
 
-interface Post{
+export interface Post{
     id: string;
     userId: string;
     title: string;
@@ -27,7 +27,7 @@ export const Main =() =>{
     return(
         <div>
             {postList?.map((post) =>(
-                <Post />
+                <Post post={post}/>
             ))}
         </div>
     )

@@ -1,3 +1,18 @@
-export const Post = () =>{
-    return (<div>sgdghd </div>)
+
+import {Post as IPost} from './main'
+interface Props{
+    post : IPost
+}
+
+export const Post = (props:Props) =>{
+    const {post} = props;
+    return (
+        <div>
+            <div className='title'> <h1>{post.title}</h1></div>
+            <div className='bosy'> <p>{post.description}</p></div>
+
+            <div className='footer'> <p>@{post.username}</p></div>
+
+        </div>
+    )
 } 
